@@ -3,8 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>kino</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-
+<h1>Bestilling av kinobillett</h1>
+<table>
+    <tr>
+        <td><p>Velg film:</p></td>
+        <td>
+            <select id="film-input">
+                <option value="">Velg en film</option>
+                <option value="Film1">Film1</option>
+                <option value="Film2">Film2</option>
+            </select>
+        </td>
+        <td><p id="film-feilmelding">Du må velge en film!</p></td>
+    </tr>
+    <tr>
+        <td><p>Antall:</p></td>
+        <td><input type="number" name="antall" id="antall-input" placeholder="Velg antall billetter"></td>
+        <td><p id="antall-feilmelding">Du må velge antall billetter!</p></td>
+    </tr>
+    <tr>
+        <td><p>Fornavn:</p></td>
+        <td><input type="text" name="fornavn" id="fornavn-input" placeholder="Skriv inn ditt fornavn"></td>
+        <td><p id="fornavn-feilmelding">Du må skrive inn et gyldig fornavn!</p></td>
+    </tr>
+    <tr>
+        <td><p>Etternavn:</p></td>
+        <td><input type="text" name="etternavn" id="etternavn-input" placeholder="Skriv inn ditt etternavn"></td>
+        <td><p id="etternavn-feilmelding">Du må skrive inn et gyldig etternavn!</p></td>
+    </tr>
+    <tr>
+        <td><p>Telefonnummer:</p></td>
+        <td><input type="number" name="telefonnummer" id="telefon-input" placeholder="Skriv inn ditt telefonnummer">
+        </td>
+        <td><p id="telefon-feilmelding">Du må skrive inn et gyldig telefonnummer!</p></td>
+    </tr>
+    <tr>
+        <td><p>Email:</p></td>
+        <td><input type="text" name="email" id="email-input" placeholder="Skeiv inn din email"></td>
+        <td><p id="email-feilmelding">Du må skrive inn en gyldig email!</p></td>
+    </tr>
+</table>
+<button onclick="feilmelding()" id="innsending-knapp">Kjøp billett</button>
+<script src="script.js"></script>
 </body>
 </html>
