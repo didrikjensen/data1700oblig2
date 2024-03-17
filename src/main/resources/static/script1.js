@@ -140,7 +140,7 @@ function opprettBillett(){
     }
 
         $.get("/lagre", billett, function(data) {
-            hentBillett()
+            hentBillett(data)
         });
 }
 
