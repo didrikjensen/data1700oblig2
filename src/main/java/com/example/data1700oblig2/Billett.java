@@ -5,16 +5,15 @@ public class Billett {
     int antall;
     String fornavn;
     String etternavn;
-    int alder;
-    int telefonNummer;
+    int telefon;
     String email;
 
-    public Billett(String film, int antall, String fornavn, String etternavn, int alder, int telefonNummer, String email) {
+    public Billett(String film, int antall, String fornavn, String etternavn, int telefonNummer, String email) {
         this.film = film;
         this.antall = antall;
         this.fornavn = fornavn;
         this.etternavn = etternavn;
-        this.telefonNummer = telefonNummer;
+        this.telefon = telefonNummer;
         this.email = email;
     }
 
@@ -54,12 +53,12 @@ public class Billett {
         this.etternavn = etternavn;
     }
 
-    public int getTelefonNummer() {
-        return telefonNummer;
+    public int getTelefon() {
+        return telefon;
     }
 
-    public void setTelefonNummer(int telefonNummer) {
-        this.telefonNummer = telefonNummer;
+    public void setTelefon(int telefonNummer) {
+        this.telefon = telefonNummer;
     }
 
     public String getEmail() {

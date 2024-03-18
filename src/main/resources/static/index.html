@@ -6,11 +6,39 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        #film-feilmelding {
+            display: none;
+        }
+
+        #antall-feilmelding {
+            display: none;
+        }
+
+        #fornavn-feilmelding {
+            display: none;
+        }
+
+        #etternavn-feilmelding {
+            display: none;
+        }
+
+        #telefon-feilmelding {
+            display: none;
+        }
+
+        #email-feilmelding {
+            display: none;
+        }
+
+    </style>
 </head>
+
 <body class="bg-primary">
-<main class="bg-light container mx-auto my-5 p-5 rounded-5 align-items-center w-50">
+<main class="bg-light container mx-auto my-5 p-5 rounded-5 align-items-center w-auto">
     <div class="">
         <h1 class="text-primary-emphasis">Bestilling av kinobillett</h1>
+
         <table>
             <tr>
                 <td><p>Velg film:</p></td>
@@ -21,43 +49,246 @@
                         <option value="Film2">Film2</option>
                     </select>
                 </td>
-                <td><p id="film-feilmelding">Du må velge en film!</p></td>
+                <td><p class="text-danger" id="film-feilmelding">Du må velge en film!</p></td>
             </tr>
-            <tr>
-                <td><p>Antall:</p></td>
-                <td><input type="number" name="antall" id="antall-input" placeholder="Velg antall billetter"></td>
-                <td><p id="antall-feilmelding">Du må velge antall billetter!</p></td>
-            </tr>
-            <tr>
-                <td><p>Fornavn:</p></td>
-                <td><input type="text" name="fornavn" id="fornavn-input" placeholder="Skriv inn ditt fornavn"></td>
-                <td><p id="fornavn-feilmelding">Du må skrive inn et gyldig fornavn!</p></td>
-            </tr>
-            <tr>
-                <td><p>Etternavn:</p></td>
-                <td><input type="text" name="etternavn" id="etternavn-input" placeholder="Skriv inn ditt etternavn">
-                </td>
-                <td><p id="etternavn-feilmelding">Du må skrive inn et gyldig etternavn!</p></td>
-            </tr>
-            <tr>
-                <td><p>Telefonnummer:</p></td>
-                <td><input type="number" name="telefonnummer" id="telefon-input"
-                           placeholder="Skriv inn ditt telefonnummer">
-                </td>
-                <td><p id="telefon-feilmelding">Du må skrive inn et gyldig telefonnummer!</p></td>
-            </tr>
-            <tr>
-                <td><p>Email:</p></td>
-                <td><input type="text" name="email" id="email-input" placeholder="Skeiv inn din email"></td>
-                <td><p id="email-feilmelding">Du må skrive inn en gyldig email!</p></td>
-            </tr>
+            <form id="billettForm">
+                <tr>
+                    <td><p>Antall:</p></td>
+                    <td><input type="number" name="antall" id="antall-input" placeholder="Velg antall billetter"></td>
+                    <td><p class="text-danger" id="antall-feilmelding">Du må velge antall billetter!</p></td>
+                </tr>
+                <tr>
+                    <td><p>Fornavn:</p></td>
+                    <td><input type="text" name="fornavn" id="fornavn-input" placeholder="Skriv inn ditt fornavn"></td>
+                    <td><p class="text-danger" id="fornavn-feilmelding">Du må skrive inn et gyldig fornavn!</p></td>
+                </tr>
+                <tr>
+                    <td><p>Etternavn:</p></td>
+                    <td><input type="text" name="etternavn" id="etternavn-input" placeholder="Skriv inn ditt etternavn">
+                    </td>
+                    <td><p class="text-danger" id="etternavn-feilmelding">Du må skrive inn et gyldig etternavn!</p></td>
+                </tr>
+                <tr>
+                    <td><p>Telefonnummer:</p></td>
+                    <td><input type="number" name="telefonnummer" id="telefon-input"
+                               placeholder="Skriv inn ditt telefonnummer">
+                    </td>
+                    <td><p class="text-danger" id="telefon-feilmelding">Du må skrive inn et gyldig telefonnummer!</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p>Email:</p></td>
+                    <td><input type="text" name="email" id="email-input" placeholder="Skriv inn din email"></td>
+                    <td><p class="text-danger" id="email-feilmelding">Du må skrive inn en gyldig email!</p></td>
+                </tr>
+            </form>
         </table>
-        <button onclick="innhentingAvBillett()" id="innsending-knapp">Kjøp billett</button>
+
+        <button class="btn btn-success" onclick="innhentingAvBillett()" id="innsending-knapp">Kjøp billett</button>
+        <button class="btn btn-danger" onclick="slettBillett()" id="slett-knapp">Slett billetter</button>
         <div id="output"></div>
     </div>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script defer src="script1.js"></script>
+<script type="application/javascript">
+    let filmInput;
+    let antallInput;
+    let fornavnInput;
+    let etternavnInput;
+    let telefonInput;
+    let emailInput;
+
+    let filmInputValidert;
+    let antallInputValidert;
+    let fornavnInputValidert;
+    let etternavnInputValidert;
+    let telefonInputValidert;
+    let emailInputValidert;
+
+    const antallRegEx = /^[1-9][0-9]?$|^100$/;
+    const navnRegEx = /^([a-zA-Z-]{1,20})$/;
+    const telefonRegEx = /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/;
+    const emailRegEx = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})([a-z]{2,8})?$/;
+
+    let output;
+
+    const filmFeilmelding = $("#film-feilmelding");
+    const antallFeilmelding = $("#antall-feilmelding");
+    const fornavnFeilmelding = $("#fornavn-feilmelding");
+    const etternavnFeilmelding = $("#etternavn-feilmelding");
+    const telefonFeilmelding = $("#telefon-feilmelding");
+    const emailFeilmelding = $("#email-feilmelding");
+    const outputDiv = $("#output");
+
+    let filmInputGyldig = false;
+    let antallInputGyldig = false;
+    let fornavnInputGyldig = false;
+    let etternavnInputGyldig = false;
+    let telefonInputGyldig = false;
+    let emailInputGyldig = false;
+
+    function feilmelding() {
+        filmFeilmeldingSjekk();
+        antallFeilmeldingSjekk();
+        fornavnFeilmeldingSjekk();
+        etternavnFeilmeldingSjekk();
+        telefonFeilmeldingSjekk();
+        emailFeilmeldingSjekk();
+    }
+
+    function filmFeilmeldingSjekk() {
+        (filmInputGyldig) ? $(filmFeilmelding).hide() : $(filmFeilmelding).show();
+    }
+
+    function antallFeilmeldingSjekk() {
+        (antallInputGyldig) ? $(antallFeilmelding).hide() : $(antallFeilmelding).show();
+    }
+
+    function fornavnFeilmeldingSjekk() {
+        (fornavnInputGyldig) ? $(fornavnFeilmelding).hide() : $(fornavnFeilmelding).show();
+    }
+
+    function etternavnFeilmeldingSjekk() {
+        (etternavnInputGyldig) ? $(etternavnFeilmelding).hide() : $(etternavnFeilmelding).show();
+    }
+
+    function telefonFeilmeldingSjekk() {
+        (telefonInputGyldig) ? $(telefonFeilmelding).hide() : $(telefonFeilmelding).show();
+    }
+
+    function emailFeilmeldingSjekk() {
+        (emailInputGyldig) ? $(emailFeilmelding).hide() : $(emailFeilmelding).show();
+    }
+
+    function innhentingAvBillett() {
+        filmInput = $("#film-input").val();
+        antallInput = $("#antall-input").val();
+        fornavnInput = $("#fornavn-input").val();
+        etternavnInput = $("#etternavn-input").val();
+        telefonInput = $("#telefon-input").val();
+        emailInput = $("#email-input").val();
+
+        if (filmInput === "" || antallInput === "" || fornavnInput === "" || etternavnInput === "" || telefonInput === "" || emailInput === "") {
+            alert("Du må fylle ut alle feltene")
+        } else {
+            validering(filmInput, antallInput, fornavnInput, etternavnInput, telefonInput, emailInput);
+        }
+
+    }
+
+    function validering(film, antall, fornavn, etternavn, telefon, email) {
+
+        if (film === "") {
+            filmInputGyldig = false;
+            filmFeilmeldingSjekk();
+            console.log(film)
+        } else {
+            filmInputGyldig = true;
+            filmInputValidert = film;
+            filmFeilmeldingSjekk();
+        }
+
+        if (antallRegEx.test(antall)) {
+            antallInputGyldig = true;
+            antallInputValidert = antall;
+            antallFeilmeldingSjekk();
+        } else {
+            antallInputGyldig = false;
+            antallFeilmeldingSjekk();
+            console.log(antall)
+        }
+
+        if (navnRegEx.test(fornavn)) {
+            fornavnInputGyldig = true;
+            fornavnInputValidert = fornavn;
+            fornavnFeilmeldingSjekk()
+        } else {
+            fornavnInputGyldig = false;
+            fornavnFeilmeldingSjekk();
+            console.log(fornavn)
+        }
+        if (navnRegEx.test(etternavn)) {
+            etternavnInputGyldig = true;
+            etternavnInputValidert = etternavn;
+            etternavnFeilmeldingSjekk()
+        } else {
+            etternavnInputGyldig = false;
+            etternavnFeilmeldingSjekk();
+            console.log(etternavn)
+        }
+        if (telefonRegEx.test(telefon)) {
+            telefonInputGyldig = true;
+            telefonInputValidert = telefon;
+            telefonFeilmeldingSjekk()
+        } else {
+            telefonInputGyldig = false;
+            telefonFeilmeldingSjekk();
+            console.log(telefon)
+        }
+        if (emailRegEx.test(email)) {
+            emailInputGyldig = true;
+            emailInputValidert = email;
+            emailFeilmeldingSjekk()
+        } else {
+            emailInputGyldig = false;
+            emailFeilmeldingSjekk();
+            console.log(email)
+        }
+
+        if (filmInputGyldig && antallInputGyldig && fornavnInputGyldig && etternavnInputGyldig && telefonInputGyldig && emailInputGyldig) {
+            opprettBillett()
+        }
+    }
+
+    function opprettBillett() {
+        const billett = {
+            film: filmInputValidert,
+            antall: antallInputValidert,
+            fornavn: fornavnInputValidert,
+            etternavn: etternavnInputValidert,
+            telefon: telefonInputValidert,
+            email: emailInputValidert
+        }
+
+        $.post("/lagre", billett, function () {
+            hentBillett()
+        });
+        tomForm();
+    }
+
+
+    function hentBillett() {
+        $.get("/hentBilletter", function (vis) {
+            formaterBillett(vis)
+        });
+    }
+
+    function formaterBillett(vis) {
+        output = "";
+        output += "<table class='table table-dark'><tr><th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Telefonnummer</th><th>Email</th></tr>"
+        for (let billett of vis) {
+            output += "<tr><td>" + billett.film + "</td><td>" + billett.antall + " </td><td>" + billett.fornavn + "</td><td>" + billett.etternavn + "</td><td>" + billett.telefon + "</td><td>" + billett.email + "</td></tr>";
+        }
+        output += "</table>";
+        outputDiv.html(output);
+    }
+
+    function slettBillett() {
+        $.post("/slett", function () {
+        });
+        output = "";
+        outputDiv.html(output)
+    }
+
+    function tomForm() {
+        filmInput = document.getElementById("film-input")
+        filmInput.selectedIndex = 0;
+
+        $('#billettForm')[0].reset();
+    }
+
+
+</script>
 
 
 </body>
