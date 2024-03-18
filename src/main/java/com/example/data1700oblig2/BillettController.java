@@ -9,17 +9,22 @@ import java.util.List;
 
 @RestController
 public class BillettController {
+    //oppretter en arraylist for billettene
     public final List<Billett> billettListe = new ArrayList<>();;
 
+    //Tømmer arraylisten
     @PostMapping("/slett")
     public void slettArray(){
         billettListe.clear();
     }
 
+    // Henter inn billetten og legger den til i arraylisten
     @PostMapping("/lagre")
     public void save(Billett innbillett) {
         billettListe.add(innbillett);
     }
+
+    //Returnerer arraylisten til frontend
     @GetMapping("/hentBilletter")
     public List<Billett> getBillettListe() {
         return billettListe;

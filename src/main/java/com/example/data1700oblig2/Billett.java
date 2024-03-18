@@ -1,5 +1,6 @@
 package com.example.data1700oblig2;
 
+//Java-class for å opprette et billett-objekt
 public class Billett {
     String film;
     int antall;
